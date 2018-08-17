@@ -8,7 +8,7 @@ interface State {
   error?: string;
 }
 
-export default class Login extends React.Component<{}, State> {
+export default class Login extends React.PureComponent<{}, State> {
   constructor(props: object) {
     super(props);
     this.updateField = this.updateField.bind(this);
@@ -20,12 +20,18 @@ export default class Login extends React.Component<{}, State> {
   }
 
   updateField(ev: React.ChangeEvent<HTMLInputElement>) {
-    switch (ev.target.name) {
+    switch (ev.target.id) {
       case "email":
-        this.setState({ emailEntry: ev.target.value.trim() });
+        this.setState({
+          emailEntry: ev.target.value.trim(),
+          error: undefined
+        });
         break;
       case "password":
-        this.setState({ passwordEntry: ev.target.value.trim() });
+        this.setState({
+          error: undefined,
+          passwordEntry: ev.target.value.trim()
+        });
         break;
     }
   }
@@ -33,19 +39,28 @@ export default class Login extends React.Component<{}, State> {
   login() {
     const { emailEntry, passwordEntry } = this.state;
 
-    if (this.isEmailValid(emailEntry) && this.isPasswordValid(passwordEntry)) {
-      this.setState({
-        error: undefined
+    if (!isEmailValid(emailEntry)) {
+      return this.setState({
+        error: "Please enter a valid email address"
       });
-      // TODO: Set app state as logged in
     }
+
+    if (!isPasswordValid(passwordEntry)) {
+      return this.setState({
+        error:
+          "Password must contain at least 8 characters, one uppercase letter, " +
+          "one lowercase letter, one number, and one special character"
+      });
+    }
+
+    // TODO: Set app state as logged in
   }
 
   render() {
     return (
       <main className="fullScreen flexContainer centered">
         <div className="Login card">
-          <div className="flexContainer header">
+          <div className="flexContainer">
             <img className="brandmark" src={brandmark} />
             <span className="title">ORCHESTRATOR</span>
           </div>
@@ -82,47 +97,37 @@ export default class Login extends React.Component<{}, State> {
       </main>
     );
   }
+}
 
-  private isEmailValid(email: string): boolean {
-    // Note: should not rely solely on javascript validation of emails
-    // The only way to truly validate an email address is to send an email
-    // https://www.regular-expressions.info/email.html
-    const emailRegex = RegExp(
-      /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
-      "i"
-    );
+export function isEmailValid(email: string): boolean {
+  // Note: should not rely solely on javascript validation of emails
+  // The only way to truly validate an email address is to send an email
+  // https://www.regular-expressions.info/email.html
+  const emailRegex = RegExp(
+    /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
+    "i"
+  );
 
-    if (!email.match(emailRegex)) {
-      this.setState({
-        error: "Please enter a valid email address"
-      });
-      return false;
-    }
-
-    return true;
+  if (!email.match(emailRegex)) {
+    return false;
   }
 
-  private isPasswordValid(password: string): boolean {
-    // At least one uppercase letter, one lowercase letter, one number, and one special character
-    const passwordRegex =
-      "^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[$@$!%*?&])[A-Za-zd$@$!%*?&]";
+  return true;
+}
 
-    if (password.length < 8) {
-      this.setState({
-        error: "Password must be at least 8 characters"
-      });
-      return false;
-    }
+export function isPasswordValid(password: string): boolean {
+  // Anything with less than eight characters
+  // OR anything with no numbers
+  // OR anything with no uppercase
+  // OR or anything with no lowercase
+  // OR anything with no special characters.
+  const rejectPasswordRegex = RegExp(
+    /^(.{0,7}|[^0-9]*|[^A-Z]*|[^a-z]*|[a-zA-Z0-9]*)$/
+  );
 
-    if (!password.match(passwordRegex)) {
-      this.setState({
-        error:
-          "Password must contain at least one uppercase letter, " +
-          "one lowercase letter, one number, and one special character"
-      });
-      return false;
-    }
-
-    return true;
+  if (password.match(rejectPasswordRegex)) {
+    return false;
   }
+
+  return true;
 }
