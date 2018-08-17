@@ -1,0 +1,71 @@
+main {
+  background: grey;
+  background-image: url(../assets/login_background.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.card.Login {
+  width: 400px;
+  height: 300px;
+  background: white;
+  padding: 50px 100px;
+}
+
+.brandmark {
+  width: 135px;
+  height: 21px;
+  margin-right: 15px;
+}
+
+.title {
+  font-size: 0.9em;
+  line-height: 18px;
+  margin-top: 7px;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.sign-in {
+  margin-top: 40px;
+  margin-bottom: 7px;
+  text-align: start;
+  font-size: 0.9em;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+input {
+  display: block;
+  height: 40px;
+  width: 394px;
+  margin-top: 20px;
+  font-family: "Muli", sans-serif;
+  font-size: 0.8em;
+  text-indent: 8px;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+input::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: rgba(0, 0, 0, 0.38);
+  opacity: 1; /* Firefox */
+}
+
+.button {
+  margin-left: auto;
+  width: 150px;
+  height: 40px;
+  background-color: #29c160;
+  color: white;
+  font-size: 0.9em;
+  font-weight: 300;
+}
+
+.error {
+  height: 24px;
+  width: 400px;
+  margin-top: 6px;
+  text-align: start;
+  font-size: 0.6em;
+  color: red;
+}
