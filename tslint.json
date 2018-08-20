@@ -9,6 +9,7 @@
   },
   "rules": {
     "interface-name": [true, "never-prefix"],
-    "member-access": [true, "no-public"]
+    "member-access": [true, "no-public"],
+    "jsx-boolean-value": false
   }
 }

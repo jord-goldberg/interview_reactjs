@@ -1,7 +1,6 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Muli', sans-serif;
 }
 
 .fullScreen {
@@ -21,6 +20,10 @@ body {
 
 .flexContainer.spaced {
   justify-content: space-around;
+}
+
+.flexContainer.vertical {
+  flex-direction: column;
 }
 
 .card {
