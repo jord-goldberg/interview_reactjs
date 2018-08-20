@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Image, MediaType, Video } from '../../types/pixabay';
+import { isImage, Image, Video } from '../../types/pixabay';
 import './Media.css';
 
 import ic_imageSvg from '../../assets/ic_image.svg';
@@ -8,24 +8,17 @@ import ic_video_4kSvg from '../../assets/ic_video_4k.svg';
 
 export interface Props {
   item: Image | Video;
+  onClick: (media: Image | Video) => void;
 }
 
-const mediaItem: React.SFC<Props> = ({ item }: Props) =>
-  isImage(item) ? <ImageItem item={item} /> : <VideoItem item={item} />;
+const mediaItem: React.SFC<Props> = ({ item, onClick }: Props) =>
+  isImage(item) ? (
+    <ImageItem item={item} onClick={onClick} />
+  ) : (
+    <VideoItem item={item} onClick={onClick} />
+  );
 
 export default mediaItem;
-
-function isImage(media: Image | Video): media is Image {
-  switch (media.type) {
-    case MediaType.ILLUSTRATION:
-    case MediaType.PHOTO:
-    case MediaType.VECTOR:
-    case MediaType.VECTOR_AI:
-    case MediaType.VECTOR_SVG:
-      return true;
-  }
-  return false;
-}
 
 const creationDate = (media: Image | Video) => {
   if (isImage(media)) {
@@ -41,8 +34,14 @@ const creationDate = (media: Image | Video) => {
   return '';
 };
 
-const ImageItem = ({ item }: { item: Image }) => (
-  <div className="item flexContainer">
+const ImageItem = ({
+  item,
+  onClick,
+}: {
+  item: Image;
+  onClick: (media: Image) => void;
+}) => (
+  <div className="item flexContainer" onClick={() => onClick(item)}>
     <div className="imageContainer">
       <img className="image" src={item.previewURL} />
     </div>
@@ -62,7 +61,13 @@ const ImageItem = ({ item }: { item: Image }) => (
   </div>
 );
 
-const VideoItem = ({ item }: { item: Video }) => {
+const VideoItem = ({
+  item,
+  onClick,
+}: {
+  item: Video;
+  onClick: (media: Video) => void;
+}) => {
   let video;
   if (item.videos.large.size) {
     video = item.videos.large;
@@ -75,7 +80,7 @@ const VideoItem = ({ item }: { item: Video }) => {
   }
 
   return (
-    <div className="item">
+    <div className="item" onClick={() => onClick(item)}>
       <div className="imageContainer">
         <img className="image" src={item.userImageURL} />
       </div>

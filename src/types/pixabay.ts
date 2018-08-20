@@ -54,3 +54,15 @@ export interface Video extends Media {
     views: 58;
   };
 }
+
+export function isImage(media: Media): media is Image {
+  switch (media.type) {
+    case MediaType.ILLUSTRATION:
+    case MediaType.PHOTO:
+    case MediaType.VECTOR:
+    case MediaType.VECTOR_AI:
+    case MediaType.VECTOR_SVG:
+      return true;
+  }
+  return false;
+}
