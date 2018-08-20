@@ -1,5 +1,5 @@
 {
-  "extends": ["tslint:recommended", "tslint-react", "tslint-config-prettier"],
+  "extends": ["tslint-config-airbnb"],
   "linterOptions": {
     "exclude": [
       "config/**/*.js",
@@ -10,6 +10,7 @@
   "rules": {
     "interface-name": [true, "never-prefix"],
     "member-access": [true, "no-public"],
-    "jsx-boolean-value": false
+    "jsx-boolean-value": false,
+    "variable-name": [true, "ban-keywords", "check-format", "allow-pascal-case"]
   }
 }

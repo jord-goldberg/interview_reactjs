@@ -1,18 +1,18 @@
-import * as React from "react";
-import { getPictures, getVideos } from "../../api/PixabayApi";
-import { Image, Video } from "../../types/pixabay";
-import AppBar from "../appbar/AppBar";
-import "./Media.css";
-import Item from "./MediaItem";
+import * as React from 'react';
+import { getPictures } from '../../api/PixabayApi';
+import { Image, Video } from '../../types/pixabay';
+import AppBar from '../appbar/AppBar';
+import './Media.css';
+import MediaItem from './MediaItem';
 
-import folderIcon from "../../assets/ic_folder.svg";
-import folderSelectedIcon from "../../assets/ic_folder_selected.svg";
+import ic_folderSvg from '../../assets/ic_folder.svg';
+import ic_folder_selectedSvg from '../../assets/ic_folder_selected.svg';
 
 enum Folder {
-  SCIENCE = "science",
-  ANIMALS = "animals",
-  FASHION = "fashion",
-  FOOD = "food"
+  SCIENCE = 'science',
+  ANIMALS = 'animals',
+  FASHION = 'fashion',
+  FOOD = 'food',
 }
 
 interface FolderData<T> {
@@ -43,14 +43,14 @@ export default class Media extends React.Component<Props, State> {
       .reduce((map, folder) => {
         map[folder] = {
           items: [],
-          pages: 0
+          pages: 0,
         };
         return map;
-      }, {});
+      },      {});
 
     this.state = {
+      folders,
       currentFolder: Folder.SCIENCE,
-      folders
     };
   }
 
@@ -60,8 +60,8 @@ export default class Media extends React.Component<Props, State> {
     getPictures(currentFolder)
       .then(pictures =>
         pictures.sort((a, b) =>
-          a.tags.toLowerCase().localeCompare(b.tags.toLowerCase())
-        )
+          a.tags.toLowerCase().localeCompare(b.tags.toLowerCase()),
+        ),
       )
       .then(pictures => this.appendFolderData(currentFolder, pictures));
   }
@@ -79,8 +79,8 @@ export default class Media extends React.Component<Props, State> {
         getPictures(selectedFolder)
           .then(pictures =>
             pictures.sort((a, b) =>
-              a.tags.toLowerCase().localeCompare(b.tags.toLowerCase())
-            )
+              a.tags.toLowerCase().localeCompare(b.tags.toLowerCase()),
+            ),
           )
           .then(pictures => this.appendFolderData(selectedFolder, pictures));
       }
@@ -95,9 +95,9 @@ export default class Media extends React.Component<Props, State> {
       folders: Object.assign(folders, {
         [folder]: {
           items: folderData ? folderData.items.concat(data) : data,
-          pages: folderData ? folderData.pages + 1 : 1
-        }
-      })
+          pages: folderData ? folderData.pages + 1 : 1,
+        },
+      }),
     });
   }
 
@@ -105,9 +105,6 @@ export default class Media extends React.Component<Props, State> {
     const { email, signOut } = this.props;
     const { currentFolder, folders } = this.state;
     const currentData = folders[currentFolder];
-
-    // tslint:disable-next-line
-    console.log(this.state);
 
     return (
       <div className="media">
@@ -123,7 +120,7 @@ export default class Media extends React.Component<Props, State> {
               <img
                 id={folder}
                 className="icon"
-                src={folder === currentFolder ? folderSelectedIcon : folderIcon}
+                src={folder === currentFolder ? ic_folderSvg : ic_folder_selectedSvg}
               />
               <div id={folder}>{folder}</div>
             </div>
@@ -131,7 +128,7 @@ export default class Media extends React.Component<Props, State> {
         </div>
         <div className="flexContainer content">
           {currentData && currentData.items.length
-            ? currentData.items.map(item => <Item key={item.id} item={item} />)
+            ? currentData.items.map(item => <MediaItem key={item.id} item={item} />)
             : null}
         </div>
       </div>

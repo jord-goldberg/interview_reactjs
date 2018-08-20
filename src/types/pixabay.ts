@@ -1,11 +1,11 @@
 export enum MediaType {
-  PHOTO = "photo",
-  ILLUSTRATION = "illustration",
-  VECTOR = "vector",
-  VECTOR_AI = "vector/ai",
-  VECTOR_SVG = "vector/svg",
-  ANIMATION = "animation",
-  FILM = "film"
+  PHOTO = 'photo',
+  ILLUSTRATION = 'illustration',
+  VECTOR = 'vector',
+  VECTOR_AI = 'vector/ai',
+  VECTOR_SVG = 'vector/svg',
+  ANIMATION = 'animation',
+  FILM = 'film',
 }
 
 export interface Media {

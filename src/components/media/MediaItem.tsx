@@ -1,19 +1,19 @@
-import * as React from "react";
-import { Image, MediaType, Video } from "../../types/pixabay";
-import "./Media.css";
+import * as React from 'react';
+import { Image, MediaType, Video } from '../../types/pixabay';
+import './Media.css';
 
-import imageIcon from "../../assets/ic_image.svg";
-import videoIcon from "../../assets/ic_video.svg";
-import v4kIcon from "../../assets/ic_video_4k.svg";
+import ic_imageSvg from '../../assets/ic_image.svg';
+import ic_videoSvg from '../../assets/ic_video.svg';
+import ic_video_4kSvg from '../../assets/ic_video_4k.svg';
 
 export interface Props {
   item: Image | Video;
 }
 
-const MediaItem: React.SFC<Props> = ({ item }: Props) =>
+const mediaItem: React.SFC<Props> = ({ item }: Props) =>
   isImage(item) ? <ImageItem item={item} /> : <VideoItem item={item} />;
 
-export default MediaItem;
+export default mediaItem;
 
 function isImage(media: Image | Video): media is Image {
   switch (media.type) {
@@ -30,14 +30,15 @@ function isImage(media: Image | Video): media is Image {
 const creationDate = (media: Image | Video) => {
   if (isImage(media)) {
     const [year, month, day, hour, minute] = media.previewURL
-      .split("photo/")[1]
-      .split("/");
+      .split('photo/')[1]
+      .split('/');
     return `${year}/${month}/${day} ${hour}:${minute}`;
-  } else if (media.userImageURL) {
-    const [year, month, day] = media.userImageURL.split("user/")[1].split("/");
+  }
+  if (media.userImageURL) {
+    const [year, month, day] = media.userImageURL.split('user/')[1].split('/');
     return `${year}/${month}/${day}`;
   }
-  return "";
+  return '';
 };
 
 const ImageItem = ({ item }: { item: Image }) => (
@@ -46,9 +47,9 @@ const ImageItem = ({ item }: { item: Image }) => (
       <img className="image" src={item.previewURL} />
     </div>
     <div className="details">
-      <div>{item.previewURL.split("/").pop()}</div>
+      <div>{item.previewURL.split('/').pop()}</div>
       <div>
-        <img src={imageIcon} />
+        <img src={ic_imageSvg} />
       </div>
       <div>
         {item.imageWidth} x {item.imageHeight}
@@ -82,13 +83,13 @@ const VideoItem = ({ item }: { item: Video }) => {
         <div>
           {
             video.url
-              .split("/")
+              .split('/')
               .pop()!
-              .split("?")[0]
+              .split('?')[0]
           }
         </div>
         <div>
-          <img src={video.width > 4000 ? v4kIcon : videoIcon} />
+          <img src={video.width > 4000 ? ic_video_4kSvg : ic_videoSvg} />
         </div>
         <div>
           {video.width} x {video.height}

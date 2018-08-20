@@ -1,18 +1,18 @@
-import * as React from "react";
-import "./AppBar.css";
+import * as React from 'react';
+import './AppBar.css';
 
-import navIcon from "../../assets/ic_nav_drawer.svg";
-import brandmark from "../../assets/videri_brandmark_white.svg";
+import ic_nav_drawerSvg from '../../assets/ic_nav_drawer.svg';
+import videri_brandmark_whiteSvg from '../../assets/videri_brandmark_white.svg';
 
 export interface Props {
   email: string;
   signOut: () => void;
 }
 
-const AppBar: React.SFC<Props> = (props: Props) => (
+const appBar: React.SFC<Props> = (props: Props) => (
   <div className="app-bar flexContainer">
-    <img className="nav-icon" src={navIcon} alt="navigation drawer" />
-    <img className="brandmark" src={brandmark} alt="brandmark" />
+    <img className="nav-icon" src={ic_nav_drawerSvg} alt="navigation drawer" />
+    <img className="brandmark" src={videri_brandmark_whiteSvg} alt="brandmark" />
     <span className="title">CONTENT</span>
     <div className="flexContainer vertical organization-container">
       <span className="organization">Organization</span>
@@ -25,4 +25,4 @@ const AppBar: React.SFC<Props> = (props: Props) => (
   </div>
 );
 
-export default AppBar;
+export default appBar;

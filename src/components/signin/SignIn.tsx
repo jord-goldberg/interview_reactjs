@@ -1,9 +1,9 @@
-import * as React from "react";
-import brandmark from "../../assets/videri_brandmark_black.svg";
-import "./SignIn.css";
+import * as React from 'react';
+import videri_brandmark_blackSvg from '../../assets/videri_brandmark_black.svg';
+import './SignIn.css';
 
 export interface Props {
-  signIn: (email: string) => void
+  signIn: (email: string) => void;
 }
 
 interface State {
@@ -19,31 +19,31 @@ export default class SignIn extends React.PureComponent<Props, State> {
     this.onPasswordKeyEvent = this.onPasswordKeyEvent.bind(this);
     this.login = this.login.bind(this);
     this.state = {
-      emailEntry: "",
-      passwordEntry: ""
+      emailEntry: '',
+      passwordEntry: '',
     };
   }
 
   updateField(ev: React.ChangeEvent<HTMLInputElement>) {
     switch (ev.target.id) {
-      case "email":
+      case 'email':
         this.setState({
           emailEntry: ev.target.value.trim(),
-          error: undefined
+          error: undefined,
         });
         break;
-      case "password":
+      case 'password':
         this.setState({
           error: undefined,
-          passwordEntry: ev.target.value.trim()
+          passwordEntry: ev.target.value.trim(),
         });
         break;
     }
   }
 
   onPasswordKeyEvent(ev: React.KeyboardEvent<HTMLInputElement>) {
-    if (ev.key === "Enter") {
-      this.login()
+    if (ev.key === 'Enter') {
+      this.login();
     }
   }
 
@@ -52,19 +52,19 @@ export default class SignIn extends React.PureComponent<Props, State> {
 
     if (!isEmailValid(emailEntry)) {
       return this.setState({
-        error: "Please enter a valid email address"
+        error: 'Please enter a valid email address',
       });
     }
 
     if (!isPasswordValid(passwordEntry)) {
       return this.setState({
         error:
-          "Password must contain at least 8 characters, one uppercase letter, " +
-          "one lowercase letter, one number, and one special character"
+          'Password must contain at least 8 characters, one uppercase letter, ' +
+          'one lowercase letter, one number, and one special character',
       });
     }
 
-    this.props.signIn(emailEntry)
+    this.props.signIn(emailEntry);
   }
 
   render() {
@@ -72,7 +72,7 @@ export default class SignIn extends React.PureComponent<Props, State> {
       <main className="sign-in fullScreen flexContainer centered">
         <div className="card content">
           <div className="flexContainer">
-            <img className="brandmark" src={brandmark} alt="brandmark" />
+            <img className="brandmark" src={videri_brandmark_blackSvg} alt="brandmark" />
             <span className="title">ORCHESTRATOR</span>
           </div>
           <div className="subtitle">
@@ -116,8 +116,10 @@ export function isEmailValid(email: string): boolean {
   // The only way to truly validate an email address is to send an email
   // https://www.regular-expressions.info/email.html
   const emailRegex = RegExp(
+    // Long regex on single line, don't complain tslint!
+    // tslint:disable-next-line
     /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
-    "i"
+    'i',
   );
 
   if (!email.match(emailRegex)) {
@@ -134,7 +136,7 @@ export function isPasswordValid(password: string): boolean {
   // OR or anything with no lowercase
   // OR anything with no special characters.
   const rejectPasswordRegex = RegExp(
-    /^(.{0,7}|[^0-9]*|[^A-Z]*|[^a-z]*|[a-zA-Z0-9]*)$/
+    /^(.{0,7}|[^0-9]*|[^A-Z]*|[^a-z]*|[a-zA-Z0-9]*)$/,
   );
 
   if (password.match(rejectPasswordRegex)) {
