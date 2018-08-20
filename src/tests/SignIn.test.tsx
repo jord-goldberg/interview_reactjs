@@ -1,6 +1,6 @@
 // import * as enzyme from "enzyme";
 // import * as React from "react";
-import { isEmailValid, isPasswordValid } from "../components/Login";
+import { isEmailValid, isPasswordValid } from "../components/signin/SignIn";
 
 const passingEmailCases = [
   "peter@microsoft.com",

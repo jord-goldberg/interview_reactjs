@@ -1,6 +1,10 @@
 import * as React from "react";
-import brandmark from "../assets/videri_brandmark.png";
-import "./Login.css";
+import brandmark from "../../assets/videri_brandmark_black.svg";
+import "./SignIn.css";
+
+export interface Props {
+  signIn: (email: string) => void
+}
 
 interface State {
   emailEntry: string;
@@ -8,10 +12,11 @@ interface State {
   error?: string;
 }
 
-export default class Login extends React.PureComponent<{}, State> {
-  constructor(props: object) {
+export default class SignIn extends React.PureComponent<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.updateField = this.updateField.bind(this);
+    this.onPasswordKeyEvent = this.onPasswordKeyEvent.bind(this);
     this.login = this.login.bind(this);
     this.state = {
       emailEntry: "",
@@ -36,6 +41,12 @@ export default class Login extends React.PureComponent<{}, State> {
     }
   }
 
+  onPasswordKeyEvent(ev: React.KeyboardEvent<HTMLInputElement>) {
+    if (ev.key === "Enter") {
+      this.login()
+    }
+  }
+
   login() {
     const { emailEntry, passwordEntry } = this.state;
 
@@ -53,18 +64,18 @@ export default class Login extends React.PureComponent<{}, State> {
       });
     }
 
-    // TODO: Set app state as logged in
+    this.props.signIn(emailEntry)
   }
 
   render() {
     return (
-      <main className="fullScreen flexContainer centered">
-        <div className="Login card">
+      <main className="sign-in fullScreen flexContainer centered">
+        <div className="card content">
           <div className="flexContainer">
-            <img className="brandmark" src={brandmark} />
+            <img className="brandmark" src={brandmark} alt="brandmark" />
             <span className="title">ORCHESTRATOR</span>
           </div>
-          <div className="sign-in">
+          <div className="subtitle">
             <span>SIGN IN</span>
           </div>
           <div>
@@ -83,11 +94,12 @@ export default class Login extends React.PureComponent<{}, State> {
                   name="password"
                   placeholder="PASSWORD"
                   onChange={this.updateField}
+                  onKeyPress={this.onPasswordKeyEvent}
                 />
 
                 <div className="error">{this.state.error}</div>
 
-                <button className="button" type="button" onClick={this.login}>
+                <button type="button" onClick={this.login}>
                   SIGN IN
                 </button>
               </div>
