@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { getPictures } from '../../api/PixabayApi';
+import { getPictures, getVideos } from '../../api/PixabayApi';
 import { Image, Video } from '../../types/pixabay';
 import AppBar from '../appbar/AppBar';
 import './Media.css';
@@ -37,8 +37,9 @@ interface State {
 export default class Media extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.selectFolder = this.selectFolder.bind(this);
     this.appendFolderData = this.appendFolderData.bind(this);
+    this.fetchData = this.fetchData.bind(this);
+    this.selectFolder = this.selectFolder.bind(this);
     this.onMediaClick = this.onMediaClick.bind(this);
     this.onCloseDetail = this.onCloseDetail.bind(this);
 
@@ -60,14 +61,41 @@ export default class Media extends React.Component<Props, State> {
 
   componentDidMount() {
     const { currentFolder } = this.state;
+    this.fetchData(currentFolder);
+  }
 
-    getPictures(currentFolder)
-      .then(pictures =>
-        pictures.sort((a, b) =>
-          a.tags.toLowerCase().localeCompare(b.tags.toLowerCase()),
-        ),
-      )
-      .then(pictures => this.appendFolderData(currentFolder, pictures));
+  appendFolderData(folder: Folder | string, data: (Image | Video)[]) {
+    const { folders } = this.state;
+    const folderData = folders[folder];
+
+    this.setState({
+      folders: Object.assign(folders, {
+        [folder]: {
+          items: folderData ? folderData.items.concat(data) : data,
+          pages: folderData ? folderData.pages + 1 : 1,
+        },
+      }),
+    });
+  }
+
+  fetchData(folder: string) {
+    const { folders } = this.state;
+    const folderData = folders[folder];
+
+    Promise.all([
+      getPictures(folder, folderData.pages + 1),
+      getVideos(folder, folderData.pages + 1),
+    ])
+      .then(([pictures, videos]) => {
+        const data: (Image | Video)[] = [];
+        return data
+          .concat(pictures)
+          .concat(videos)
+          .sort((a, b) =>
+            a.tags.toLowerCase().localeCompare(b.tags.toLowerCase()),
+          );
+      })
+      .then(data => this.appendFolderData(folder, data));
   }
 
   selectFolder(ev: any) {
@@ -80,29 +108,9 @@ export default class Media extends React.Component<Props, State> {
       const selectedData = folders[selectedFolder];
 
       if (!selectedData.items.length) {
-        getPictures(selectedFolder)
-          .then(pictures =>
-            pictures.sort((a, b) =>
-              a.tags.toLowerCase().localeCompare(b.tags.toLowerCase()),
-            ),
-          )
-          .then(pictures => this.appendFolderData(selectedFolder, pictures));
+        this.fetchData(selectedFolder);
       }
     }
-  }
-
-  appendFolderData(folder: Folder | string, data: Image[] | Video[]) {
-    const { folders } = this.state;
-    const folderData = folders[folder];
-
-    this.setState({
-      folders: Object.assign(folders, {
-        [folder]: {
-          items: folderData ? folderData.items.concat(data) : data,
-          pages: folderData ? folderData.pages + 1 : 1,
-        },
-      }),
-    });
   }
 
   onMediaClick(media: Image | Video) {
