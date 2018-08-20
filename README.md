@@ -12,7 +12,10 @@ git clone https://github.com/jord-goldberg/interview_reactjs.git
 cd interview_reactjs
 touch .env
 ```
-3. In the file you just created, add `REACT_APP_PIXABAY_KEY={/*Your API Key*/}` (Replace `{/*Your API Key*/}` with the API key from the prerequisite step).
+3. Open the file you just created, add `REACT_APP_PIXABAY_KEY={/*Your API Key*/}` and save (Replace `{/*Your API Key*/}` with the API key from the prerequisite step).
+```bash
+open .env
+```
 4. Make sure you have typescript on your machine.
 ```bash
 npm install -g typescript
